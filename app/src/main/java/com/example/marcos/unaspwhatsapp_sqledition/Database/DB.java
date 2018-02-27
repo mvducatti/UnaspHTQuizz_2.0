@@ -17,8 +17,8 @@ public class DB{
         StrictMode.ThreadPolicy po = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(po);
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://databases.000webhost.com:3306/id2773560_unaspwhatsapp";
-        String user = "id2773560_mvducatti";
+        String url = "jdbc:mysql://localhost/phpmyadmin/phpmyadmin";
+        String user = "phpmydmin";
         String pass = "roketp0wer";
         conn = DriverManager.getConnection(url, user, pass);
         return conn;

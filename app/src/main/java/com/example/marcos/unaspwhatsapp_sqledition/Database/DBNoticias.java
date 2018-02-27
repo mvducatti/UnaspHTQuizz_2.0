@@ -44,10 +44,10 @@ public class DBNoticias{
     public void salvar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         String comando = "";
         if (this.getId() == -1){
-            comando = String.format("INSERT INTO curso (news_post) VALUES ('%s');",
+            comando = String.format("INSERT INTO noticia (news_post) VALUES ('%s');",
                     this.getNoticia());
         }else {
-            comando = String.format("UPDATE usuarios SET noticia ='%s'WHERE id = %d;",
+            comando = String.format("UPDATE noticia SET news_post ='%s'WHERE id = %d;",
                     this.getNoticia());
         }
         DB db =  new DB();

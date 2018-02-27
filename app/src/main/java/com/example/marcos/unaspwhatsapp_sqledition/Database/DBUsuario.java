@@ -54,7 +54,7 @@ public class DBUsuario {
     public void salvar(String teste) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, LoginException {
         String comando = "";
         if (this.getId() == -1) {
-            comando = String.format("INSERT INTO usuario (nome,login,senha,tipousuario) VALUES ('%s','%s','%s');",
+            comando = String.format("INSERT INTO usuario (nome,login,senha) VALUES ('%s','%s','%s');",
                     this.getNome(), this.getLogin(), this.getSenha());
         } else {
             comando = String.format("UPDATE usuario SET nome ='%s', login ='%s', senha = '%s', WHERE id = %d;",
