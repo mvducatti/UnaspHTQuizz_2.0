@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".MainActivity.CadastrarUsuario" />
         <activity android:name=".MainActivity.Login" />
+        <activity android:name=".PostActivity.Post"></activity>
     </application>
 
 </manifest>
