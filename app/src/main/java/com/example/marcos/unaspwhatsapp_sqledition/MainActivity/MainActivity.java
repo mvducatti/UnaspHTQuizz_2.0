@@ -1,6 +1,8 @@
 package com.example.marcos.unaspwhatsapp_sqledition.MainActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,12 +15,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.marcos.unaspwhatsapp_sqledition.Database.DatabaseHelper;
 import com.example.marcos.unaspwhatsapp_sqledition.PostActivity.Post;
 import com.example.marcos.unaspwhatsapp_sqledition.R;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import javax.xml.transform.Result;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    DatabaseHelper myDb;
+    ListView lv_noticia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +42,29 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        lv_noticia = findViewById(R.id.lv_noticias);
+        myDb = new DatabaseHelper(this);
+
+        ArrayList<String> theList = new ArrayList<>();
+        Cursor data = myDb.getListContents();
+
+        if (data.getCount() == 0){
+            Toast.makeText(MainActivity.this,"The Database was empty :(", Toast.LENGTH_LONG).show();
+        }else{
+            while (data.moveToNext()){
+                theList.add(data.getString(1));
+                ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, theList);
+                lv_noticia.setAdapter(listAdapter);
+            }
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Post.class);
                 startActivity(intent);
+                finish();
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
