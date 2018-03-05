@@ -61,7 +61,7 @@ public class DBUsuario {
         return lista;
     }
 
-    public void salvar(String teste) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, LoginException {
+    public void salvar(String s) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, LoginException {
         String comando = "";
         if (this.getId() == -1) {
             comando = String.format("INSERT INTO newuser (user_name,user_email,user_password) VALUES ('%s','%s','%s');",

@@ -1,19 +1,30 @@
 package com.example.marcos.unaspwhatsapp_sqledition.Database;
 
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.marcos.unaspwhatsapp_sqledition.UsuarioLogado;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DBNoticias {
-    private int id;
-    private String post;
 
-    public String _mensagem;
+    private int id;
+    public String newsTitle;
+    public String newsPost;
     public boolean _status;
+    public String _message;
 
     public DBNoticias(){
         this.id = -1;
-        this.post = "";
+        this.newsTitle = "";
+        this.newsPost = "";
+
+    }
+
+    public DBNoticias(AppCompatActivity activity) {
+
     }
 
     public ArrayList<DBNoticias> getLista(){
@@ -25,36 +36,35 @@ public class DBNoticias {
 
                     DBNoticias obj = new DBNoticias();
 
-                    obj.setId(resultSet.getInt("id"));
-                    obj.setPost(resultSet.getString("noticia"));
+                    obj.setId(resultSet.getInt("id_news"));
+                    obj.setNewsTitle(resultSet.getString("news_title"));
+                    obj.setNewsPost(resultSet.getString("news_message"));
                     lista.add(obj);
-
-                    obj = null;
                 }
             }
         }catch (Exception ex){
-            this._mensagem = ex.getMessage();
+            this._message = ex.getMessage();
             this._status = false;
             this._status = false;
         }
         return lista;
     }
 
-    public void salvar(int usuario) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+    public void salvar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         String comando = "";
         if (this.getId() == -1){
-            comando = String.format("INSERT INTO noticia (noticias, id_usuario) VALUES ('%s',%d);",
-                    this.getPost(), usuario);
+            comando = String.format("INSERT INTO news (news_title, news_message, fk_user_id) VALUES ('%s','%s',%d);",
+                    this.getNewsTitle(), this.getNewsPost(), UsuarioLogado.getUser().getId());
         }else {
-            comando = String.format("UPDATE noticia SET noticias ='%s',id_usuario = %d WHERE id = %d;",
-                    this.getPost(), usuario);
+            comando = String.format("UPDATE news SET news_title ='%s', news_post = '%s', id_news = %d WHERE id = %d;",
+                    this.getNewsTitle(), this.getNewsPost(), this.getId());
         }
         DB db =  new DB();
-        db.execute(comando);
+        db.executeQuery(comando);
     }
 
     public void apagar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
-        String comando = String.format("DELETE FROM curso WHERE id = %d;", this.getId());
+        String comando = String.format("DELETE FROM news WHERE id = %d;", this.getId());
 
         DB db =  new DB();
         db.execute(comando);
@@ -68,12 +78,19 @@ public class DBNoticias {
         this.id = id;
     }
 
-    public String getPost() {
-        return post;
+    public String getNewsTitle() {
+        return newsTitle;
     }
 
-    public void setPost(String post) {
-        this.post = post;
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
     }
 
+    public String getNewsPost() {
+        return newsPost;
+    }
+
+    public void setNewsPost(String newsPost) {
+        this.newsPost = newsPost;
+    }
 }

@@ -47,6 +47,10 @@ public class DB{
         return resultSet;
     }
 
+    public static int executeQuery(String query) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        return conecta().createStatement().executeUpdate(query);
+    }
+
     public static void update(String query) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         conecta().createStatement().executeUpdate(query);
     }

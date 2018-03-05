@@ -10,8 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.marcos.unaspwhatsapp_sqledition.Database.DB;
-import com.example.marcos.unaspwhatsapp_sqledition.Main2Activity;
+import com.example.marcos.unaspwhatsapp_sqledition.Model.User;
 import com.example.marcos.unaspwhatsapp_sqledition.R;
+import com.example.marcos.unaspwhatsapp_sqledition.UsuarioLogado;
 
 import java.sql.ResultSet;
 
@@ -20,6 +21,8 @@ import javax.security.auth.login.LoginException;
 public class Login extends AppCompatActivity {
 
     private EditText editEmail, editSenha;
+    // Session Manager Class
+    UsuarioLogado session;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -29,8 +32,10 @@ public class Login extends AppCompatActivity {
         editEmail = findViewById(R.id.loginText);
         editSenha = findViewById(R.id.SenhaText);
 
+
         editEmail.setText("mvducatti@gmail.com");
         editSenha.setText("roketpower");
+
     }
 
     public void alert(String titulo, String txt){
@@ -53,14 +58,20 @@ public class Login extends AppCompatActivity {
             String testeemail = editEmail.getText().toString();
             String testesenha = editSenha.getText().toString();
 
-            rs = DB.execute("SELECT user_email, user_password FROM newuser WHERE user_email = '" + testeemail + "' AND user_password = '" + testesenha + "'");
+            rs = DB.execute("SELECT * FROM newuser WHERE user_email = '" + testeemail + "' AND user_password = '" + testesenha + "'");
             while (rs.next()){
-                String login = rs.getString("user_email");
+                String email = rs.getString("user_email");
                 String senha = rs.getString("user_password");
-                if (login.equals(testeemail)){
+                if (email.equals(testeemail)){
                     if (senha.equals(testesenha)){
-                        Intent intent = new Intent(Login.this, Main2Activity.class);
+                        Intent intent = new Intent(Login.this, MainActivity.class);
                         intent.putExtra("LOGIN", editEmail.getText().toString().trim());
+                        User user = new User();
+                        user.setId(Integer.parseInt(rs.getString("user_id")));
+                        user.setName(rs.getString("user_name"));
+                        user.setEmail(email);
+                        user.setPassword(senha);
+                        UsuarioLogado.verifyUser(user);
                         startActivity(intent);
                         return;
                     }
