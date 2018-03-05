@@ -1,5 +1,6 @@
 package com.example.marcos.unaspwhatsapp_sqledition;
 
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 
 import com.example.marcos.unaspwhatsapp_sqledition.Adapter.UsersRecyclerAdapter;
 import com.example.marcos.unaspwhatsapp_sqledition.Database.DBUsuario;
+import com.example.marcos.unaspwhatsapp_sqledition.Fragments.UsuarioFragment;
 import com.example.marcos.unaspwhatsapp_sqledition.Model.User;
 
 import java.util.ArrayList;
@@ -160,7 +162,9 @@ public class Main2Activity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+//            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.frameSet, new UsuarioFragment());
+//            ft.commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

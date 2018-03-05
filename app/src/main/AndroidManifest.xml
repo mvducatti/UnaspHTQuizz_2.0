@@ -23,11 +23,17 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
+<<<<<<< HEAD
             android:theme="@style/AppTheme"></activity>
 =======
         <activity android:name=".MainActivity.MainActivity" />
         <activity android:name=".PostActivity.Post"></activity>
 >>>>>>> 7d0c28f229abc2fab43d8064c912c33c99fae0ec
+=======
+            android:theme="@style/AppTheme" />
+        <activity android:name=".MainActivity.PostNews" />
+        <activity android:name=".MainActivity.MainActivity"></activity>
+>>>>>>> new-branch
     </application>
 
 </manifest>
