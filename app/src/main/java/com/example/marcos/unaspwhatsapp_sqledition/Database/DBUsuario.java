@@ -1,8 +1,15 @@
 package com.example.marcos.unaspwhatsapp_sqledition.Database;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.marcos.unaspwhatsapp_sqledition.Model.User;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -10,10 +17,9 @@ import javax.security.auth.login.LoginException;
 public class DBUsuario {
 
     private int id;
-    private String login;
+    private String email;
     private String senha;
     private String nome;
-    public static int usuarioLogado;
 
     public String _mensagem;
     public boolean _status;
@@ -22,24 +28,28 @@ public class DBUsuario {
         super();
         this.id = -1;
         this.nome = "";
-        this.login = "";
+        this.email = "";
         this.senha = "";
+    }
+
+    public DBUsuario(AppCompatActivity activity) {
+
     }
 
     public ArrayList<DBUsuario> getLista() {
         DB db = new DB();
         ArrayList<DBUsuario> lista = new ArrayList<>();
         try {
-            ResultSet resultSet = db.select("SELECT * FROM usuario");
+            ResultSet resultSet = db.select("SELECT * FROM newuser");
             if (resultSet != null) {
                 while (resultSet.next()) {
 
                     DBUsuario obj = new DBUsuario();
 
-                    obj.setId(resultSet.getInt("id"));
-                    obj.setNome(resultSet.getString("nome"));
-                    obj.setLogin(resultSet.getString("login"));
-                    obj.setSenha(resultSet.getString("senha"));
+                    obj.setId(resultSet.getInt("user_id"));
+                    obj.setNome(resultSet.getString("user_name"));
+                    obj.setEmail(resultSet.getString("user_email"));
+                    obj.setSenha(resultSet.getString("user_password"));
                     lista.add(obj);
 
                 }
@@ -54,18 +64,18 @@ public class DBUsuario {
     public void salvar(String teste) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, LoginException {
         String comando = "";
         if (this.getId() == -1) {
-            comando = String.format("INSERT INTO usuario (nome,login,senha,tipousuario) VALUES ('%s','%s','%s');",
-                    this.getNome(), this.getLogin(), this.getSenha());
+            comando = String.format("INSERT INTO newuser (user_name,user_email,user_password) VALUES ('%s','%s','%s');",
+                    this.getNome(), this.getEmail(), this.getSenha());
         } else {
-            comando = String.format("UPDATE usuario SET nome ='%s', login ='%s', senha = '%s', WHERE id = %d;",
-                    this.getNome(), this.getLogin(), this.getSenha(), this.getId());
+            comando = String.format("UPDATE newuser SET nome ='%s', login ='%s', senha = '%s', WHERE id = %d;",
+                    this.getNome(), this.getEmail(), this.getSenha(), this.getId());
         }
         DB db = new DB();
         db.update(comando);
     }
 
     public void apagar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String comando = String.format("DELETE FROM usuario WHERE id = %d;", this.getId());
+        String comando = String.format("DELETE FROM newuser WHERE user_id = %d;", this.getId());
         DB db = new DB();
         db.execute(comando);
     }
@@ -86,12 +96,12 @@ public class DBUsuario {
         this.nome = nome;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {

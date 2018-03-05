@@ -16,9 +16,9 @@ public class DB{
     private static Connection conecta() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         StrictMode.ThreadPolicy po = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(po);
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://databases.000webhost.com:3306/id2773560_unaspwhatsapp";
-        String user = "id2773560_mvducatti";
+        Class.forName("org.postgresql.Driver").newInstance();
+        String url = "jdbc:postgresql://10.0.2.2/unaspht";
+        String user = "postgres";
         String pass = "roketp0wer";
         conn = DriverManager.getConnection(url, user, pass);
         return conn;

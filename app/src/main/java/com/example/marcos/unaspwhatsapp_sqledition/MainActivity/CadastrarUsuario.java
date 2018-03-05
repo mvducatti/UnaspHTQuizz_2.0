@@ -9,18 +9,21 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.marcos.unaspwhatsapp_sqledition.Database.DB;
 import com.example.marcos.unaspwhatsapp_sqledition.Database.DBUsuario;
+import com.example.marcos.unaspwhatsapp_sqledition.Model.User;
 import com.example.marcos.unaspwhatsapp_sqledition.R;
 
 public class CadastrarUsuario extends AppCompatActivity {
 
     private DBUsuario dbUsuario;
-    private EditText editTextCDLogin;
+    private EditText editTextCDEmail;
     private EditText editTextCDSenha;
     private EditText editTextCDNome;
     private EditText PIN;
+    private User user;
 
-    public void exibirTexto(String titulo, String txt){
+    public void alert(String titulo, String txt){
         AlertDialog alertDialog = new AlertDialog.Builder(CadastrarUsuario.this).create();
         alertDialog.setTitle(titulo);
         alertDialog.setMessage(txt);
@@ -41,10 +44,13 @@ public class CadastrarUsuario extends AppCompatActivity {
         dbUsuario = new DBUsuario();
 
         editTextCDNome = findViewById(R.id.editTextCDNome);
-        editTextCDLogin = findViewById(R.id.editTextCDLogin);
+        editTextCDEmail = findViewById(R.id.editTextCDEmail);
         editTextCDSenha = findViewById(R.id.editTextCDSenha);
         PIN = findViewById(R.id.editTextPIN);
-        PIN.setText("");
+        editTextCDNome.setText("marcos");
+        editTextCDEmail.setText("mvducatti");
+        editTextCDSenha.setText("roketpower");
+        PIN.setText("3705");
 
     }
 
@@ -53,25 +59,26 @@ public class CadastrarUsuario extends AppCompatActivity {
 
             if (PIN.getText().toString().equals("3705")) {
                 String nomeusuario = editTextCDNome.getText().toString();
-                String loginusuario = editTextCDLogin.getText().toString();
+                String loginusuario = editTextCDEmail.getText().toString();
                 String senhausuario = editTextCDSenha.getText().toString();
 
                 if (!(editTextCDNome.getText().toString().equals("") || editTextCDNome.getText() == null ||
-                        editTextCDLogin.getText().toString().equals("") || editTextCDLogin.getText() == null ||
+                        editTextCDEmail.getText().toString().equals("") || editTextCDEmail.getText() == null ||
                         editTextCDSenha.getText().toString().equals("") || editTextCDSenha.getText() == null
 
                 )) {
-
                     dbUsuario.setNome(nomeusuario);
-                    dbUsuario.setLogin(loginusuario);
+                    dbUsuario.setEmail(loginusuario);
                     dbUsuario.setSenha(senhausuario);
 
                     dbUsuario.salvar(PIN.getText().toString());
+                    user = new User();
 
-                    exibirTexto("CRIAÇÃO DE USUÁRIO", "Usuário " + nomeusuario + " criado com sucesso!");
+
+                    alert("CRIAÇÃO DE USUÁRIO", "Usuário " + nomeusuario + " criado com sucesso!");
 
                     editTextCDNome.setText("");
-                    editTextCDLogin.setText("");
+                    editTextCDEmail.setText("");
                     editTextCDSenha.setText("");
                     PIN.setText("");
                 }
@@ -80,7 +87,7 @@ public class CadastrarUsuario extends AppCompatActivity {
             }
         }
         catch (Exception e){
-            exibirTexto("Erro", e.getMessage());
+            alert("Erro", e.getMessage());
         }
     }
 
