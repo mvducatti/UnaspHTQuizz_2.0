@@ -62,7 +62,14 @@ public class Login extends AppCompatActivity {
                         Intent intent = new Intent(Login.this, Main2Activity.class);
                         intent.putExtra("LOGIN", editEmail.getText().toString().trim());
                         startActivity(intent);
+                        finish();
                         return;
+                    }
+                    else if (login != testelogin){
+                        editLogin.setError("O e-mail é inválido");
+                    }
+                    else if (senha != testesenha){
+                        editSenha.setError("Senha incorreta");
                     }
                 }
             }

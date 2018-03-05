@@ -4,32 +4,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DBNoticias {
+public class DBNoticias{
+
     private int id;
-    private String post;
+    private String news_post;
 
     public String _mensagem;
     public boolean _status;
 
     public DBNoticias(){
+        super();
         this.id = -1;
-        this.post = "";
+        this.news_post = "";
     }
 
     public ArrayList<DBNoticias> getLista(){
+        DB db = new DB();
         ArrayList<DBNoticias> lista = new ArrayList<>();
         try {
-            ResultSet resultSet = DB.select("SELECT * FROM noticia");
+            ResultSet resultSet = db.select("SELECT * FROM noticia");
             if (resultSet != null){
                 while (resultSet.next()){
 
                     DBNoticias obj = new DBNoticias();
 
                     obj.setId(resultSet.getInt("id"));
-                    obj.setPost(resultSet.getString("noticia"));
+                    obj.setNoticia(resultSet.getString("news_post"));
                     lista.add(obj);
-
-                    obj = null;
                 }
             }
         }catch (Exception ex){
@@ -40,21 +41,21 @@ public class DBNoticias {
         return lista;
     }
 
-    public void salvar(int usuario) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+    public void salvar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         String comando = "";
         if (this.getId() == -1){
-            comando = String.format("INSERT INTO noticia (noticias, id_usuario) VALUES ('%s',%d);",
-                    this.getPost(), usuario);
+            comando = String.format("INSERT INTO noticia (news_post) VALUES ('%s');",
+                    this.getNoticia());
         }else {
-            comando = String.format("UPDATE noticia SET noticias ='%s',id_usuario = %d WHERE id = %d;",
-                    this.getPost(), usuario);
+            comando = String.format("UPDATE noticia SET news_post ='%s'WHERE id = %d;",
+                    this.getNoticia());
         }
         DB db =  new DB();
         db.execute(comando);
     }
 
     public void apagar() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
-        String comando = String.format("DELETE FROM curso WHERE id = %d;", this.getId());
+        String comando = String.format("DELETE FROM noticia WHERE id = %d;", this.getId());
 
         DB db =  new DB();
         db.execute(comando);
@@ -68,12 +69,11 @@ public class DBNoticias {
         this.id = id;
     }
 
-    public String getPost() {
-        return post;
+    public String getNoticia() {
+        return news_post;
     }
 
-    public void setPost(String post) {
-        this.post = post;
+    public void setNoticia(String news_post) {
+        this.news_post = news_post;
     }
-
 }
