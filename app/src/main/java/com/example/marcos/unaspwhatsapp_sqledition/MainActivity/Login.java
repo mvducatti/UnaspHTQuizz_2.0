@@ -108,6 +108,12 @@ public class Login extends AppCompatActivity {
                         finish();
                         return;
                     }
+                    else if (login != testelogin){
+                        editLogin.setError("O e-mail é inválido");
+                    }
+                    else if (senha != testesenha){
+                        editSenha.setError("Senha incorreta");
+                    }
                 }
             }
             throw new LoginException("Usuário ou senha incorretos");
