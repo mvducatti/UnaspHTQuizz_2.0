@@ -1,7 +1,9 @@
 package com.example.marcos.unaspwhatsapp_sqledition.MainActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,28 +33,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerViewNews = findViewById(R.id.recyclerViewNews);
+
+        initStuff();
+        getDataFromPostgres();
+
         FloatingActionButton fab = findViewById(R.id.fabNews);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PostNews.class);
                 startActivity(intent);
-
-                initViews();
-                initObjects();
             }
         });
 
     }
 
-    private void initViews() {
-        recyclerViewNews = findViewById(R.id.recyclerViewNews);
-    }
 
     /**
      * This method is to initialize objects to be used
      */
-    private void initObjects() {
+    private void initStuff() {
 
         try {
             listNoticias = new ArrayList<>();
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerViewNews.setAdapter(newsRecyclerAdapter);
             databaseHelper = new DBNoticias(activity);
 
-            getDataFromSQLite();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method is to fetch all user records from SQLite
      */
-    private void getDataFromSQLite() {
+    private void getDataFromPostgres() {
         // AsyncTask is used that SQLite operation not blocks the UI Thread.
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 listNoticias.clear();
-                for (DBNoticias dbNoticias : databaseHelper.getLista()) {
+                for (DBNoticias dbNoticias : databaseHelper.getNewsList()) {
                     Noticia noticia = new Noticia();
                     noticia.setUser_id(dbNoticias.getId());
                     noticia.setNewsTitle(dbNoticias.getNewsTitle());
@@ -92,9 +92,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
+                newsRecyclerAdapter.addItems(listNoticias);
                 newsRecyclerAdapter.notifyDataSetChanged();
             }
         }.execute();
+    }
+
+    public void Deslogar () {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+        Intent i = new Intent(MainActivity.this,Login.class);
+        startActivity(i);
     }
 }

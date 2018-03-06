@@ -27,10 +27,10 @@ public class DBNoticias {
 
     }
 
-    public ArrayList<DBNoticias> getLista(){
+    public ArrayList<DBNoticias> getNewsList(){
         ArrayList<DBNoticias> lista = new ArrayList<>();
         try {
-            ResultSet resultSet = DB.select("SELECT * FROM noticia");
+            ResultSet resultSet = DB.select("SELECT * FROM news");
             if (resultSet != null){
                 while (resultSet.next()){
 

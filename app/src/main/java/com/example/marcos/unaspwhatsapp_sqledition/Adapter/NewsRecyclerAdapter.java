@@ -62,6 +62,9 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         }
     }
 
+    public void addItems(List<Noticia> listNews) {
+        this.listNews.addAll(listNews);
+    }
 
 }
 
