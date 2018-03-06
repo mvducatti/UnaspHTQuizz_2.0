@@ -1,17 +1,22 @@
 package com.example.marcos.unaspwhatsapp_sqledition.MainActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.marcos.unaspwhatsapp_sqledition.Database.DB;
 import com.example.marcos.unaspwhatsapp_sqledition.Model.User;
 import com.example.marcos.unaspwhatsapp_sqledition.R;
+import com.example.marcos.unaspwhatsapp_sqledition.UserSession;
 import com.example.marcos.unaspwhatsapp_sqledition.UsuarioLogado;
 
 import java.sql.ResultSet;
@@ -21,8 +26,14 @@ import javax.security.auth.login.LoginException;
 public class Login extends AppCompatActivity {
 
     private EditText editEmail, editSenha;
-    // Session Manager Class
-    UsuarioLogado session;
+
+    // User Session Manager Class
+    UserSession session;
+    private SharedPreferences sharedPreferences;
+    private static final String PREFER_NAME = "Reg";
+
+//    // Session Manager Class
+//    UsuarioLogado session;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -32,10 +43,18 @@ public class Login extends AppCompatActivity {
         editEmail = findViewById(R.id.loginText);
         editSenha = findViewById(R.id.SenhaText);
 
+                    editEmail.setText("mvducatti@gmail.com");
+                    editSenha.setText("roketpower");
 
-        editEmail.setText("mvducatti@gmail.com");
-        editSenha.setText("roketpower");
+        // User Session Manager
+        session = new UserSession(getApplicationContext());
+        session.checkLogin();
 
+        Toast.makeText(getApplicationContext(),
+                "User Login Status: " + session.isUserLoggedIn(),
+                Toast.LENGTH_LONG).show();
+
+        sharedPreferences = getSharedPreferences(PREFER_NAME, Context.MODE_PRIVATE);
     }
 
     public void alert(String titulo, String txt){
@@ -58,20 +77,33 @@ public class Login extends AppCompatActivity {
             String testeemail = editEmail.getText().toString();
             String testesenha = editSenha.getText().toString();
 
+            String uName = null;
+            String uPassword =null;
+
             rs = DB.execute("SELECT * FROM newuser WHERE user_email = '" + testeemail + "' AND user_password = '" + testesenha + "'");
             while (rs.next()){
+
                 String email = rs.getString("user_email");
                 String senha = rs.getString("user_password");
                 if (email.equals(testeemail)){
                     if (senha.equals(testesenha)){
+
+                        uName = sharedPreferences.getString("Name", "");
+                        uPassword = sharedPreferences.getString("txtPassword", "");
+
+                        session.createUserLoginSession(uName, uPassword);
+
                         Intent intent = new Intent(Login.this, MainActivity.class);
-                        intent.putExtra("LOGIN", editEmail.getText().toString().trim());
-                        User user = new User();
-                        user.setId(Integer.parseInt(rs.getString("user_id")));
-                        user.setName(rs.getString("user_name"));
-                        user.setEmail(email);
-                        user.setPassword(senha);
-                        UsuarioLogado.verifyUser(user);
+
+//                        User user = new User();
+//                        user.setId(Integer.parseInt(rs.getString("user_id")));
+//                        user.setName(rs.getString("user_name"));
+//                        user.setEmail(email);
+//                        user.setPassword(senha);
+//                        UsuarioLogado.verifyUser(user);
+
+
+
                         startActivity(intent);
                         finish();
                         return;
@@ -104,3 +136,4 @@ public class Login extends AppCompatActivity {
         }
     }
 }
+
